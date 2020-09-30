@@ -1,5 +1,21 @@
 service: sls-notes-backend
-frameworkVersion: "1.53"
+frameworkVersion: "2.3"
+
+plugins:
+  - serverless-offline
+
+custom:
+  allowedHeaders:
+    - Accept
+    - Content-Type
+    - Content-Length
+    - Authorization
+    - X-Amz-Date
+    - X-Api-Key
+    - X-Amz-Security-Token
+    - X-Amz-User-Agent
+    - app_user_id
+    - app_user_name
 
 provider:
   name: aws
@@ -11,10 +27,69 @@ provider:
   endpointType: regional
   environment:
     NOTES_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb::Query
+        - dynamodb::PutItem
+        - dynamodb::DeleteItem
+      Resource: "arn::aws:dynamodb::${opt:region, self:provider.region}:*:table/${self.provider.environment.NOTES_TABLE}"
 
 functions:
-  hello:
-    handler: handler.hello
+  add-note:
+    handler: api/notes/post.handler
+    description: POST /notes
+    events:
+      - http:
+          path: notes
+          method: post
+          cors:
+            origin: "*"
+            headers: ${self:custom.allowedHeaders}
+
+  get-note:
+    handler: api/notes/getById.handler
+    description: Get /notes/n/:note_id
+    events:
+      - http:
+          method: get
+          path: notes/n/{note_id}
+          cors:
+            origin: "*"
+            headers: ${self:custom.allowedHeaders}
+
+  update-note:
+    handler: api/notes/update.handler
+    description: PATCH /notes/note_id
+    events:
+      - http:
+          path: notes
+          method: patch
+          cors:
+            origin: "*"
+            headers: ${self:custom.allowedHeaders}
+
+  delete-note:
+    handler: api/notes/delete.handler
+    description: DELETE /notes/t/timestamp
+    events:
+      - http:
+          path: notes/t/{timestamp}
+          method: delete
+          cors:
+            origin: "*"
+            headers: ${self:custom.allowedHeaders}
+
+  get-notes:
+    handler: api/notes/get.handler
+    description: GET /notes/
+    events:
+      - http:
+          path: notes
+          method: get
+          cors:
+            origin: "*"
+            headers: ${self:custom.allowedHeaders}
 
 resources:
   Resources:
