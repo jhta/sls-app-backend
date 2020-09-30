@@ -1,5 +1,5 @@
 service: sls-notes-backend
-frameworkVersion: "1.53"
+frameworkVersion: "2"
 
 plugins:
   - serverless-offline
@@ -37,7 +37,7 @@ provider:
 
 functions:
   add-note:
-    handler: api/notes/post.handler
+    handler: backend/api/notes/post.handler
     description: POST /notes
     events:
       - http:
@@ -48,7 +48,7 @@ functions:
             headers: ${self:custom.allowedHeaders}
 
   get-note:
-    handler: api/notes/getById.handler
+    handler: backend/api/notes/getById.handler
     description: Get /notes/n/:note_id
     events:
       - http:
@@ -59,7 +59,7 @@ functions:
             headers: ${self:custom.allowedHeaders}
 
   update-note:
-    handler: api/notes/update.handler
+    handler: backend/api/notes/update.handler
     description: PATCH /notes/note_id
     events:
       - http:
@@ -70,7 +70,7 @@ functions:
             headers: ${self:custom.allowedHeaders}
 
   delete-note:
-    handler: api/notes/delete.handler
+    handler: backend/api/notes/delete.handler
     description: DELETE /notes/t/timestamp
     events:
       - http:
@@ -81,7 +81,7 @@ functions:
             headers: ${self:custom.allowedHeaders}
 
   get-notes:
-    handler: api/notes/get.handler
+    handler: backend/api/notes/get.handler
     description: GET /notes/
     events:
       - http:
