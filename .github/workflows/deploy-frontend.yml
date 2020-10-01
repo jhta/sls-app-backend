@@ -3,10 +3,12 @@ on:
   push:
     paths:
       - "frontend/**"
+      - ".github/workflows/deploy-frontend.yml"
     branches: [master]
   pull_request:
     paths:
       - "frontend/**"
+      - ".github/workflows/deploy-frontend.yml"
     branches: [master]
 jobs:
   build:
