@@ -6,11 +6,11 @@ name: Serverless Action
 on:
   push:
     paths:
-      - "backend"
+      - "backend/**"
     branches: [master]
   pull_request:
     paths:
-      - "backend"
+      - "backend/**"
     branches: [master]
 
 jobs:
