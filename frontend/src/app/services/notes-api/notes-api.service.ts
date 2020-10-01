@@ -1,83 +1,83 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
 
 declare const API_ROOT: string;
 declare const STAGE: string;
 
 @Injectable()
 export class NotesApiService {
-    options;
-    constructor(private httpClient: HttpClient) {}
+  options;
+  constructor(private httpClient: HttpClient) {}
 
-    setOptions() {
-        this.options = {
-            headers: {
-                app_user_id: 'test_user',
-                app_user_name: 'Test User'
-            }
-        };
+  setOptions() {
+    this.options = {
+      headers: {
+        app_user_id: "test_user",
+        app_user_name: "Test User",
+      },
+    };
+  }
+
+  addNote(item) {
+    let path = STAGE + "/notes";
+    let endpoint = API_ROOT + path;
+
+    let itemData;
+    itemData = {
+      content: item.content,
+      cat: item.cat,
+    };
+
+    if (item.title != "") {
+      itemData.title = item.title;
     }
 
-    addNote(item) {
-        let path = STAGE + '/note';
-        let endpoint = API_ROOT + path;
-        
-        let itemData;
-        itemData = {
-            content: item.content,
-            cat: item.cat
-        };
+    let reqBody = {
+      Item: itemData,
+    };
+    this.setOptions();
+    return this.httpClient.post(endpoint, reqBody, this.options);
+  }
 
-        if(item.title != "") {
-            itemData.title = item.title;
-        }
+  updateNote(item) {
+    let path = STAGE + "/notes";
+    let endpoint = API_ROOT + path;
 
-        let reqBody = {
-            Item: itemData
-        };
-        this.setOptions();
-        return this.httpClient.post(endpoint, reqBody, this.options);
+    let itemData;
+    itemData = {
+      content: item.content,
+      cat: item.cat,
+      timestamp: parseInt(item.timestamp),
+      note_id: item.note_id,
+    };
+
+    if (item.title != "") {
+      itemData.title = item.title;
     }
 
-    updateNote(item) {
-        let path = STAGE + '/note';
-        let endpoint = API_ROOT + path;
-        
-        let itemData;
-        itemData = {
-            content: item.content,
-            cat: item.cat,
-            timestamp: parseInt(item.timestamp),
-            note_id: item.note_id
-        };
+    let reqBody = {
+      Item: itemData,
+    };
+    this.setOptions();
+    return this.httpClient.patch(endpoint, reqBody, this.options);
+  }
 
-        if (item.title != "") {
-            itemData.title = item.title;
-        }
+  deleteNote(timestamp) {
+    let path = STAGE + "/notes/t/" + timestamp;
+    let endpoint = API_ROOT + path;
+    this.setOptions();
+    return this.httpClient.delete(endpoint, this.options);
+  }
 
-        let reqBody = {
-            Item: itemData
-        };
-        this.setOptions();
-        return this.httpClient.patch(endpoint, reqBody, this.options);
+  getNotes(start?): Observable<any> {
+    let path = STAGE + "/notes?limit=8";
+
+    if (start > 0) {
+      path += "&start=" + start;
     }
-
-    deleteNote(timestamp) {
-        let path = STAGE + '/note/t/' + timestamp;
-        let endpoint = API_ROOT + path;
-        this.setOptions();
-        return this.httpClient.delete(endpoint, this.options);
-    }
-
-    getNotes(start?): Observable<any> {
-        let path = STAGE + '/notes?limit=8';
-        
-        if (start > 0) {
-            path += '&start=' + start;
-        }
-        let endpoint = API_ROOT + path;
-        this.setOptions();
-        return this.httpClient.get(endpoint, this.options);
-    }
+    let endpoint = API_ROOT + path;
+    this.setOptions();
+    return this.httpClient.get(endpoint, this.options);
+  }
 }
