@@ -7,10 +7,12 @@ on:
   push:
     paths:
       - "backend/**"
+      - ".github/workflows/deploy.yml"
     branches: [master]
   pull_request:
     paths:
       - "backend/**"
+      - ".github/workflows/deploy.yml"
     branches: [master]
 
 jobs:
