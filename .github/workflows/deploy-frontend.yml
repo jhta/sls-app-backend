@@ -25,3 +25,5 @@ jobs:
         run: cd frontend && npm install --silent && npm run build:prod
       - name: Deploy static site to S3 bucket
         run: aws s3 sync ./frontend/public s3://sls-app-frontend --delete
+      - name: Cache invalidation
+        run: aws cloudfront create-invalidation --distribution-id EATA9X8Y4KAYL --paths "/*"
