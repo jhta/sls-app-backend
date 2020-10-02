@@ -6,6 +6,8 @@ const getResponseHeaders = () => ({
   "Access-Control-Allow-Origin": "*",
 });
 
+const getIdToken = (headers = {}) => headers.Authorization;
+
 const getExpirationDate = (days = 0) => {
   const date = new Date();
   date.setDate(date.getDate() + days);
@@ -21,4 +23,5 @@ module.exports = {
   getUserName,
   getExpirationDate,
   getNoteId,
+  getIdToken,
 };

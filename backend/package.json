@@ -18,6 +18,7 @@
   "homepage": "https://github.com/jhta/sls-app-backend#readme",
   "dependencies": {
     "aws-sdk": "^2.762.0",
+    "jwt-decode": "^3.0.0",
     "lodash": "^4.17.20",
     "moment": "^2.29.0",
     "uuid": "^8.3.0"
